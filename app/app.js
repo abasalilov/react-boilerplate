@@ -14,7 +14,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-
+import ApolloClient from 'apollo-client';
+import {ApolloProvider} from 'react-apollo';
 // Import root app
 import App from 'containers/App/index';
 
@@ -46,13 +47,24 @@ import configureStore from './configureStore';
 const initialState = {};
 const history = createHistory();
 const store = configureStore(initialState, history);
+const client = new ApolloClient({
+  dataIdFromObject: o => o.id
+});
+
+const Root = () => {
+  return (
+    <ApolloProvider client={client}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>
+  </ApolloProvider>
+  )
+}
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>
+  <Root/>
   , document.getElementById('app'));
 
 // Install ServiceWorker and AppCache in the end since

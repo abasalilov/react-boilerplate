@@ -79,7 +79,7 @@ class HomePage extends React.PureComponent { // eslint-disable-line react/prefer
             <p>
               P
             </p>
-            <Section>
+            <Section data-GQL='data-section'>
               <H2>
                 Here
               </H2>

@@ -31,7 +31,6 @@ export default class MainPage extends React.Component {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/features" component={FeaturePage} />
-        <Route path="" component={NotFoundPage} />
       </Switch>
       </div>
     )

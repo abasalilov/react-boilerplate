@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
-import ApolloClient from 'apollo-client';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import {ApolloProvider} from 'react-apollo';
 // Import root app
 import App from 'containers/App/index';
@@ -42,13 +42,19 @@ import 'file-loader?name=[name].[ext]!./.htaccess'; // eslint-disable-line impor
 import configureStore from './configureStore';
 
 // Import CSS reset and Global Styles
+const networkInterface = createNetworkInterface({
+  uri: '/graphql',
+  opts: {
+    credentials: 'same-origin',
+  },
+});
 
 // Create redux store with history
 const initialState = {};
 const history = createHistory();
 const store = configureStore(initialState, history);
 const client = new ApolloClient({
-  dataIdFromObject: o => o.id
+  networkInterface
 });
 
 const Root = () => {

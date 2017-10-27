@@ -1,9 +1,12 @@
 /* eslint consistent-return:0 */
 const bodyParser = require("body-parser");
 const express = require('express');
-const expressGraphQL = require('express-graphql')
+import {
+  graphqlExpress,
+  graphiqlExpress,
+} from 'graphql-server-express';
 const logger = require('./logger');
-const schema = require('../schema/index')
+const {schema} = require('../schema/index')
 const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
@@ -11,23 +14,29 @@ const isDev = process.env.NODE_ENV !== 'production';
 const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
 const resolve = require('path').resolve;
 const cors = require('cors');
-const app = express();
+const server = express();
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 
-app.use("*", cors({ origin: "http://localhost:3001" }));
+server.use("*", cors({ origin: "http://localhost:3000", credentials: 'same-origin'}));
 
-app.use('/graphql', cors(), expressGraphQL({
-  graphiql: true,
-  schema
-}))
+server.use(
+  "/graphql",
+  bodyParser.json(),
+  graphqlExpress({
+     graphiql: true,
+    schema
+  })
+);
 
-app.use('/graphiql', cors(), expressGraphQL({
-  graphiql: true,
-  schema
-}))
-
+server.use(
+  "/graphiql",
+  graphiqlExpress({
+      graphiql: true,
+    endpointURL: "/graphql"
+  })
+);
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

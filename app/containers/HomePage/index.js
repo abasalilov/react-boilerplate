@@ -79,7 +79,7 @@ export class HomePage extends React.Component { // eslint-disable-line react/pre
           </Section>
           <div >
             <H2>
-              Component State
+              Input Component State
             </H2>
             <div style={{border:'solid black 2px', height:'3rem'}}>
             {this.state.inputText}

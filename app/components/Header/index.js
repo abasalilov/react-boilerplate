@@ -8,13 +8,14 @@ import HeaderLink from './HeaderLink';
 import Banner from './banner.png';
 import messages from './messages';
 
-class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class Header extends React.Component {
+  // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <div  className="headerLink1" style={{marginTop:'3rem'}}>
-          <Img src={Banner} alt="react-boilerplate - Logo" />
+      <div className="headerLink1" style={{ marginTop: '3rem' }}>
+        <Img src={Banner} alt="react-boilerplate - Logo" />
         <NavBar>
-          <HeaderLink  to="/">
+          <HeaderLink to="/">
             <FormattedMessage {...messages.home} />
           </HeaderLink>
           <HeaderLink className="headerLink2" to="/concepts">

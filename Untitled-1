@@ -1,0 +1,226 @@
+var mysql = require('mysql'),
+	pool;
+
+module.exports = {
+	init: function() {
+		pool  = mysql.createPool({
+			host: process.env.MYSQL_HOST,
+			user: process.env.MYSQL_USER,
+			password: process.env.MYSQL_PASSWORD,
+			multipleStatements: true
+		});
+	},
+	getConnection: function(callback) {
+		pool.getConnection(callback);
+	}
+};
+
+
+
+            <!--<envvar name="MONGO_CONN_STR" value="mongodb://parts-detect:x1wrE24FoqQk@ds031632.mongolab.com:31632/parts-detect-stage"/>-->
+            <envvar name="MONGO_CONN_STR" value="mongodb://parts-detect:x1wrE24FoqQk@ds041854-a0.mongolab.com:41854,ds041854-a1.mongolab.com:41854/com-partsdetect-app-staging?replicaSet=rs-ds041854"/>
+            <envvar name="MYSQL_HOST" value="165.225.156.93"/>
+            <envvar name="MYSQL_USER" value="root"/>
+            <envvar name="MYSQL_PASSWORD" value="AgOc_Eddepp7"/>
+
+
+
+            var models = require('../models'),
+	services = require('./'),
+	mysql = require('mysql'),
+	async = require('async');
+
+var dataPlanet = {
+	getMake: function(callback) {
+		var sql = 'SELECT id, title, num_parts FROM data_planet.make';
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			connection.query(sql, function (err, results) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+
+				return callback(null, results);
+			});
+		});
+	},
+	getMake2YearByMake: function(make, callback) {
+		var sql = 'SELECT id, make, year FROM data_planet.make2year WHERE make = ?',
+			inserts = [make];
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			connection.query(mysql.format(sql, inserts), function (err, results) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+
+				return callback(null, results);
+			});
+		});
+	},
+	getModelByMake2Year: function(id, callback) {
+		var sql = 'SELECT id, title, make2year_id, make, year FROM data_planet.model WHERE make2year_id = ?',
+			inserts = [id];
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			connection.query(mysql.format(sql, inserts), function (err, results) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+
+				return callback(null, results);
+			});
+		});
+	},
+	getSubModelByModel: function(id, callback) {
+		var sql = 'SELECT id, title, model_id, make, year, model FROM data_planet.submodel WHERE model_id = ?',
+			inserts = [id];
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			connection.query(mysql.format(sql, inserts), function (err, results) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+
+				return callback(null, results);
+			});
+		});
+	},
+	getEngineBySubModel: function(id, callback) {
+		var sql = 'SELECT id, title, submodel_id, make, year, model, submodel, num_parts FROM data_planet.engine WHERE submodel_id = ?',
+			inserts = [id];
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			connection.query(mysql.format(sql, inserts), function (err, results) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+
+				return callback(null, results);
+			});
+		});
+	},
+	getEngineByEdmundsData: function(data, callback) {
+		var engines = [],
+			sql = 'SELECT id, title, submodel_id, make, year, model, submodel, num_parts ' +
+				'FROM data_planet.engine ' +
+				'WHERE LOWER(make) = ? ' +
+				'AND LOWER(model) = ? ' +
+				'AND year = ? ' +
+				'AND LOWER(title) LIKE ?',
+			inserts = [
+				data.make.name.toLowerCase(),
+				data.model.name.toLowerCase(),
+				data.years[0].year,
+				data.engine ? data.engine.cylinder + ' cyl ' + data.engine.size + 'l' : '%'
+			];
+
+		services.mysql.getConnection(function (err, connection) {
+			if (err) return callback(new Error(err));
+
+			async.series([
+				function(callback) {
+					connection.query(mysql.format(sql, inserts), function (err, results) {
+						if (err) return callback(err);
+
+						engines = results;
+						callback();
+					});
+				},
+				function(callback) {
+					if (engines.length) return callback();
+
+					sql = 'SELECT id, title, submodel_id, make, year, model, submodel, num_parts ' +
+					'FROM data_planet.engine ' +
+					'WHERE LOWER(make) = ? ' +
+					'AND MATCH(model) AGAINST (? in boolean mode)' +
+					'AND year = ? ' +
+					'AND LOWER(title) LIKE \'%\'';
+
+					connection.query(mysql.format(sql, inserts), function (err, results) {
+						if (err) return callback(err);
+
+						for (var i = 0; i < results.length; i++) {
+							results[i].submodel = results[i].model + ' ' + results[i].submodel;
+						}
+
+						engines = results;
+						callback();
+					});
+				}
+			], function(err) {
+				connection.release();
+
+				if (err) return callback(new Error(err));
+				if (!engines.length) services.notify.someoneAboutEdmundMatchFailure(data, function() {});
+
+				callback(null, engines);
+			});
+		});
+	}
+};
+
+module.exports = dataPlanet;
+
+
+
+
+
+
+router.get('/generic/vehicle/make', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getMake(function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});
+
+router.get('/generic/vehicle/:make/year', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getMake2YearByMake(req.params.make, function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});
+
+router.get('/generic/vehicle/make/:id/model', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getModelByMake2Year(req.params.id, function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});
+
+router.get('/generic/vehicle/make/year/:id/sub-model', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getSubModelByModel(req.params.id, function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});
+
+router.get('/generic/vehicle/make/year/model/:id/engine', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getEngineBySubModel(req.params.id, function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});
+
+router.post('/generic/vehicle/match/vin', services.auth.restrict, function(req, res, next) {
+	services.dataPlanet.getEngineByEdmundsData(req.body, function(err, records) {
+		if (err) return next(err);
+
+		res.send(records);
+	});
+});

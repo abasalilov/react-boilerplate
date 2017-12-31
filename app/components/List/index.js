@@ -6,23 +6,39 @@ import Wrapper from './Wrapper';
 
 function List(props) {
   const ComponentToRender = props.component;
-  let content = (<div></div>);
-
+  let content = <div />;
   // If we have items, render them
   if (props.items) {
-    content = props.items.map((item) => (
-      <ComponentToRender key={`item-${item.id}`} item={item} />
+    if (props.items === '') {
+      return;
+    }
+    const data = Object.entries(props.items);
+    content = data.map((item) => (
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <li
+          style={{ height: '10%', color: 'red', border: 'solid red' }}
+          key={`item-${Math.random()}`}
+          value={item[0]}
+        >
+          {item[0]}
+        </li>
+        <li
+          style={{ height: '20%', color: 'red', border: 'solid red' }}
+          key={`item-${Math.random()}`}
+          value={item[1]}
+        >
+          {item[1]}
+        </li>
+      </div>
     ));
   } else {
     // Otherwise render a single component
-    content = (<ComponentToRender />);
+    content = <ComponentToRender />;
   }
 
   return (
     <Wrapper>
-      <Ul>
-        {content}
-      </Ul>
+      <Ul>{content}</Ul>
     </Wrapper>
   );
 }

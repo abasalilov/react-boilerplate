@@ -1,5 +1,5 @@
 /*
- * HomeReducer
+ * pdHomeReducer
  *
  * The reducer takes care of our data. Using actions, we can change our
  * application state.
@@ -9,27 +9,30 @@
  * case YOUR_ACTION_CONSTANT:
  *   return state.set('yourStateVariable', true);
  */
+
 import { fromJS } from 'immutable';
 
-import {
-  CHANGE_USERNAME,
-} from './constants';
+import { SET_SLIDE_MENU, LOAD_DECODED, SET_SEARCH } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
-  username: '',
+  search: '',
+  slideMenuOpen: false,
+  vinData: '',
 });
 
-function homeReducer(state = initialState, action) {
+function pdHomeReducer(state = initialState, action) {
   switch (action.type) {
-    case CHANGE_USERNAME:
-
+    case SET_SEARCH:
       // Delete prefixed '@' from the github username
-      return state
-        .set('username', action.name.replace(/@/gi, ''));
+      return state.set('search', action.search);
+    case SET_SLIDE_MENU:
+      return state.set('slideMenuOpen', action.bool);
+    case LOAD_DECODED:
+      return state.set('vinData', action.data);
     default:
       return state;
   }
 }
 
-export default homeReducer;
+export default pdHomeReducer;

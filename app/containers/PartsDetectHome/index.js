@@ -1,5 +1,5 @@
 /*
- * SearchPage
+ * PartsDetectHome
  *
  * This is the first thing users see of our App, at the '/' route
  */
@@ -95,7 +95,7 @@ const styles = {
   },
 };
 
-export class SearchPage extends React.Component {
+export class PartsDetectHome extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
   /**
    * when initial state Vin is not null, submit the form to load repos
@@ -108,7 +108,9 @@ export class SearchPage extends React.Component {
     };
     this.updateInputText = this.updateInputText.bind(this);
   }
-  componentDidMount() {}
+  componentDidMount() {
+    console.log('props', this.props);
+  }
 
   updateInputText(e) {
     this.setState({ inputText: e.target.value });
@@ -196,12 +198,12 @@ export class SearchPage extends React.Component {
   }
 }
 
-SearchPage.propTypes = {
+PartsDetectHome.propTypes = {
   vin: PropTypes.string,
   setVinData: PropTypes.func,
   onChangeVin: PropTypes.func,
   setSlideMenu: PropTypes.func,
-  vinData: PropTypes.object,
+  vinData: PropTypes.string,
   slideMenuOpen: PropTypes.bool,
 };
 
@@ -224,4 +226,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const withReducer = injectReducer({ key: 'home', reducer });
 const withSaga = injectSaga({ key: 'home', saga });
 
-export default compose(withReducer, withSaga, withConnect)(SearchPage);
+export default compose(withReducer, withSaga, withConnect)(PartsDetectHome);

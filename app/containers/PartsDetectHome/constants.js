@@ -14,3 +14,4 @@ export const SET_SLIDE_MENU = 'boilerplate/PartsDetectHome/SET_SLIDE_MENU';
 export const LOAD_DECODE_SUCCESS = 'boilerplate/App/LOAD_DECODE_SUCCESS';
 export const LOAD_DECODE_ERROR = 'boilerplate/App/LOAD_DECODE_ERROR';
 export const LOAD_DECODED = 'boilerplate/App/LOAD_DECODED';
+export const CHANGE_VIN = 'boilerplate/App/CHANGE_VIN';

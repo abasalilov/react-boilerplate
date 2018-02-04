@@ -21,11 +21,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import {
-  makeSelectRepos,
-  makeSelectLoading,
-  makeSelectError,
-} from 'containers/App/selectors';
-import {
   makeSelectSlideMenu,
   makeSelectVin,
   makeSelectVinData,
@@ -108,9 +103,7 @@ export class PartsDetectHome extends React.Component {
     };
     this.updateInputText = this.updateInputText.bind(this);
   }
-  componentDidMount() {
-    console.log('props', this.props);
-  }
+  componentDidMount() {}
 
   updateInputText(e) {
     this.setState({ inputText: e.target.value });
@@ -121,13 +114,11 @@ export class PartsDetectHome extends React.Component {
       const data = await pd(vin);
       this.props.setVinData(data);
     } catch (e) {
-      console.log(e);
       alert(e);
     }
   }
 
   render() {
-    console.log('props', this.props);
     const { setSlideMenu, slideMenuOpen, onChangeVin, vin } = this.props;
     const {
       queryContainer,
@@ -138,8 +129,6 @@ export class PartsDetectHome extends React.Component {
       input,
       queryRow,
       subHeader,
-      vinData,
-      clear,
     } = styles;
     return (
       <div style={anchor}>
@@ -152,7 +141,6 @@ export class PartsDetectHome extends React.Component {
             <meta name="description" content="Parts Detect ICO MVP" />
           </Helmet>
           <div>
-            {console.log('vin', slideMenuOpen)}
             <div>
               <CenteredSection>
                 <H2>Early Features</H2>

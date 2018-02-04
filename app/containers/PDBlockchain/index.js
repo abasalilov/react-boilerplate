@@ -1,5 +1,5 @@
 /*
- * FeaturePage
+ * PDBlockchain
  *
  * List all the features
  */
@@ -13,15 +13,27 @@ import List from './List';
 import ListItem from './ListItem';
 import ListItemTitle from './ListItemTitle';
 
-export default class FeaturePage extends React.Component {
+export default class PDBlockchain extends React.Component {
+  componentWillMount() {}
+
+  // async getChain(vin) {
+  //   try {
+  //     const data = await pd(vin);
+  //     this.props.setVinData(data);
+  //   } catch (e) {
+  //     console.log(e);
+  //     alert(e);
+  //   }
+  // }
+
   render() {
-    console.log('this.props', this.props);
     return (
       <div>
         <Helmet>
           <title>Our Blockchain Explorer </title>
           <meta name="description" content="Concepts page" />
         </Helmet>
+        {'Here yo!'}
         <H1>
           <FormattedMessage {...messages.header} />
         </H1>
@@ -41,24 +53,6 @@ export default class FeaturePage extends React.Component {
             </ListItemTitle>
             <p>
               <FormattedMessage {...messages.feedbackMessage} />
-            </p>
-          </ListItem>
-
-          <ListItem>
-            <ListItemTitle>
-              <FormattedMessage {...messages.routingHeader} />
-            </ListItemTitle>
-            <p>
-              <FormattedMessage {...messages.routingMessage} />
-            </p>
-          </ListItem>
-
-          <ListItem>
-            <ListItemTitle>
-              <FormattedMessage {...messages.networkHeader} />
-            </ListItemTitle>
-            <p>
-              <FormattedMessage {...messages.networkMessage} />
             </p>
           </ListItem>
         </List>

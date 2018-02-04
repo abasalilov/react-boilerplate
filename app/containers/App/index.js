@@ -1,5 +1,4 @@
 /**
- *
  * App
  *
  * This component is the skeleton around the actual pages, and should only
@@ -8,14 +7,14 @@
 
 import PartsDetectHome from 'containers/PartsDetectHome/Loadable';
 import Home from 'containers/Home/Loadable';
-import FeaturePage from 'containers/FeaturePage/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import PDBlockchain from 'containers/PDBlockchain/Loadable';
+// import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -27,26 +26,22 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Helmet defaultTitle="Parts Detect ICO MVP">
-          <meta name="description" content="Parts Detect ICO MVP" />
-        </Helmet>
-        <div style={{ border: 'green dotted', width: '100%' }}>
-          <AppWrapper>
-            <Header />
-            <Switch>
-              <Route exact path="/" component={PartsDetectHome} />
-              <Route path="/concepts" component={FeaturePage} />
-              <Route path="/search" component={Home} />
-            </Switch>
-          </AppWrapper>
-        </div>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div>
+    <Helmet defaultTitle="Parts Detect ICO MVP">
+      <meta name="description" content="Parts Detect ICO MVP" />
+    </Helmet>
+    <div style={{ width: '100%' }}>
+      <AppWrapper>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={PartsDetectHome} />
+          <Route path="/pdbc" component={PDBlockchain} />
+          <Route path="/search" component={Home} />
+        </Switch>
+      </AppWrapper>
+    </div>
+  </div>
+);
 
 export default App;

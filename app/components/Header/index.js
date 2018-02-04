@@ -18,7 +18,7 @@ class Header extends React.Component {
           <HeaderLink to="/">
             <FormattedMessage {...messages.home} />
           </HeaderLink>
-          <HeaderLink className="headerLink2" to="/concepts">
+          <HeaderLink className="headerLink2" to="/pdbc">
             <FormattedMessage {...messages.features} />
           </HeaderLink>
         </NavBar>

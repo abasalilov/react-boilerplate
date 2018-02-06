@@ -1,10 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import Ul from './Ul';
 import Wrapper from './Wrapper';
 
+const styles = {
+  rowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    border: 'solid green',
+    borderRadius: '10px',
+  },
+  colOne: {
+    height: '20%',
+    margin: '1rem',
+    minWidth: '15rem',
+  },
+  colTwo: {
+    height: '20%',
+    maxWidth: '30rem',
+    margin: '1rem',
+  },
+};
+
 function List(props) {
+  const { rowContainer, colOne, colTwo } = styles;
   const ComponentToRender = props.component;
   let content = <div />;
   // If we have items, render them
@@ -14,19 +32,11 @@ function List(props) {
     }
     const data = Object.entries(props.items);
     content = data.map((item) => (
-      <div key={item[0]} style={{ display: 'flex', flexDirection: 'row' }}>
-        <li
-          style={{ height: '10%', color: 'red', border: 'solid red' }}
-          key={`item-${Math.random()}`}
-          value={item[0]}
-        >
+      <div key={item[0]} style={rowContainer}>
+        <li style={colOne} key={`item-${Math.random()}`} value={item[0]}>
           {item[0]}
         </li>
-        <li
-          style={{ height: '20%', color: 'red', border: 'solid red' }}
-          key={`item-${Math.random()}`}
-          value={item[1]}
-        >
+        <li style={colTwo} key={`item-${Math.random()}`} value={item[1]}>
           {item[1]}
         </li>
       </div>
@@ -42,10 +52,5 @@ function List(props) {
     </Wrapper>
   );
 }
-
-List.propTypes = {
-  component: PropTypes.func.isRequired,
-  items: PropTypes.object,
-};
 
 export default List;

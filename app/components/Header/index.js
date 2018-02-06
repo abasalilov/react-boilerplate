@@ -12,7 +12,7 @@ class Header extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <div className="headerLink1" style={{ marginTop: '3rem' }}>
+      <div className="headerLink1">
         <Img src={Banner} alt="ico poc" />
         <NavBar>
           <HeaderLink to="/">

@@ -40,16 +40,14 @@ const styles = {
   queryContainer: {
     display: 'flex',
     flexDirection: 'column',
-    margin: '1rem',
     justifyContent: 'center',
     alignItems: 'center',
-    border: 'solid green',
+    border: 'solid black',
   },
   queryRow: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    margin: '1rem',
   },
   subHeader: {
     display: 'flex',
@@ -78,7 +76,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    border: 'solid green',
   },
   slideOutRight: {
     animation: 'x 1s',
@@ -89,10 +86,25 @@ const styles = {
     border: 'solid #fabd44',
     borderRadius: '10px',
   },
-  sideMenu: {
-    border: 'solid green',
-  },
+  sideMenu: {},
   container: {},
+  specs: {
+    textAlign: 'center',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    fontSize: '.75rem',
+  },
+  btmButton: {
+    border: 'solid #fabd44',
+    borderRadius: '10px',
+    float: 'right',
+    margin: '1rem',
+  },
 };
 
 export class PartsDetectHome extends React.Component {
@@ -135,6 +147,9 @@ export class PartsDetectHome extends React.Component {
       subHeader,
       sideMenu,
       container,
+      details,
+      specs,
+      btmButton,
     } = styles;
     return (
       <div style={container}>
@@ -148,6 +163,12 @@ export class PartsDetectHome extends React.Component {
               <meta name="description" content="Parts Detect ICO MVP" />
             </Helmet>
             <div>
+              <Section>
+                <H2>Early Feature</H2>
+                <div>Blockchain based auto maintenance records</div>
+                <li>Submit a vin number</li>
+                <li>Select a maintenance operation</li>
+              </Section>
               <div>
                 <CenteredSection>
                   <div style={queryContainer}>
@@ -173,24 +194,18 @@ export class PartsDetectHome extends React.Component {
                     </button>
                   </div>
                 </CenteredSection>
-                <Section>
-                  <H2>Early Features</H2>
-                  <div>Blockchain based auto maintenance records</div>
-                  <li>Submit a vin number</li>
-                  <li>Select a maintenance operation</li>
-                </Section>
               </div>
             </div>
           </article>
         </div>
-
         {this.props.vinData && (
           <div>
-            <H2>Vehicle Specifications</H2>
-            <div style={{ border: 'solid black 2px', height: '3rem' }}>
-              {vin}
-            </div>
+            <H2 style={specs}>Vehicle Specifications {vin}</H2>
+            <div style={details}>*scroll to bottom to submit order</div>
             <List items={this.props.vinData} component={() => {}} />
+            <button style={btmButton} onClick={() => this.handleSubmit(vin)}>
+              {'Submit Event'}
+            </button>
           </div>
         )}
       </div>

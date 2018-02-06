@@ -14,7 +14,7 @@ function List(props) {
     }
     const data = Object.entries(props.items);
     content = data.map((item) => (
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div key={item[0]} style={{ display: 'flex', flexDirection: 'row' }}>
         <li
           style={{ height: '10%', color: 'red', border: 'solid red' }}
           key={`item-${Math.random()}`}
@@ -45,7 +45,7 @@ function List(props) {
 
 List.propTypes = {
   component: PropTypes.func.isRequired,
-  items: PropTypes.array,
+  items: PropTypes.object,
 };
 
 export default List;

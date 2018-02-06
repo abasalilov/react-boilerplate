@@ -133,9 +133,7 @@ export class PartsDetectHome extends React.Component {
     } = styles;
     return (
       <div style={anchor}>
-        <div>
-          {slideMenuOpen ? <SideMenu onChangeVin={onChangeVin} /> : <div />}
-        </div>
+        {slideMenuOpen ? <SideMenu onChangeVin={onChangeVin} /> : <div />}
         <article style={split}>
           <Helmet>
             <title>Parts Detect ICO MVP</title>
@@ -173,10 +171,7 @@ export class PartsDetectHome extends React.Component {
                   {vin}
                 </div>
                 {this.props.vinData === '' ? null : (
-                  <div>
-                    <a href="/searchParts">Search for parts</a>
-                    <List items={this.props.vinData} component={() => {}} />
-                  </div>
+                  <List items={this.props.vinData} component={() => {}} />
                 )}
               </div>
             </div>
@@ -186,15 +181,6 @@ export class PartsDetectHome extends React.Component {
     );
   }
 }
-
-PartsDetectHome.propTypes = {
-  vin: PropTypes.string,
-  setVinData: PropTypes.func,
-  onChangeVin: PropTypes.func,
-  setSlideMenu: PropTypes.func,
-  vinData: PropTypes.string,
-  slideMenuOpen: PropTypes.bool,
-};
 
 export function mapDispatchToProps(dispatch) {
   return {

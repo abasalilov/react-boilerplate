@@ -13,7 +13,7 @@ class Header extends React.Component {
   render() {
     return (
       <div className="headerLink1" style={{ marginTop: '3rem' }}>
-        <Img src={Banner} alt="react-boilerplate - Logo" />
+        <Img src={Banner} alt="ico poc" />
         <NavBar>
           <HeaderLink to="/">
             <FormattedMessage {...messages.home} />

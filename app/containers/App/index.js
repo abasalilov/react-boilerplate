@@ -6,8 +6,6 @@
  */
 
 import PartsDetectHome from 'containers/PartsDetectHome/Loadable';
-import Home from 'containers/Home/Loadable';
-import PDBlockchain from 'containers/PDBlockchain/Loadable';
 import BlockChainExplorer from 'containers/BlockChainExplorer/Loadable';
 // import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
@@ -38,7 +36,6 @@ const App = () => (
         <Switch>
           <Route exact path="/" component={PartsDetectHome} />
           <Route path="/pdbc" component={BlockChainExplorer} />
-          <Route path="/search" component={Home} />
         </Switch>
       </AppWrapper>
     </div>

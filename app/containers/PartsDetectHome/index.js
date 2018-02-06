@@ -3,13 +3,10 @@
  *
  * This is the first thing users see of our App, at the '/' route
  */
-
 import { slideOutRight } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
 import pd from 'pdvindecoder/lib';
-
 import React from 'react';
-import PropTypes from 'prop-types';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import List from 'components/List';
@@ -25,10 +22,8 @@ import {
   makeSelectVin,
   makeSelectVinData,
 } from './selectors';
-
 import CenteredSection from './CenteredSection';
 import Section from './Section';
-
 import {
   changeVin,
   setSlideMenu as createSetSlideMenuAction,
@@ -36,12 +31,19 @@ import {
 } from './actions';
 import reducer from './reducer';
 import saga from './saga';
+require('./pdHome.css');
+
+const message1 = 'Close sample vins';
+const message2 = 'No Vin handy? Click here';
 
 const styles = {
   queryContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     margin: '1rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: 'solid green',
   },
   queryRow: {
     display: 'flex',
@@ -60,9 +62,6 @@ const styles = {
     border: 'solid black 2px',
     width: '13rem',
   },
-  h3: {
-    float: 'right',
-  },
   clear: {
     display: 'none',
   },
@@ -79,6 +78,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
+    border: 'solid green',
   },
   slideOutRight: {
     animation: 'x 1s',
@@ -86,9 +86,13 @@ const styles = {
     animationName: Radium.keyframes(slideOutRight, 'slideOutRight'),
   },
   button: {
-    border: 'solid red',
+    border: 'solid #fabd44',
     borderRadius: '10px',
   },
+  sideMenu: {
+    border: 'solid green',
+  },
+  container: {},
 };
 
 export class PartsDetectHome extends React.Component {
@@ -123,60 +127,72 @@ export class PartsDetectHome extends React.Component {
     const { setSlideMenu, slideMenuOpen, onChangeVin, vin } = this.props;
     const {
       queryContainer,
-      h3,
       button,
       anchor,
       split,
       input,
       queryRow,
       subHeader,
+      sideMenu,
+      container,
     } = styles;
     return (
-      <div style={anchor}>
-        {slideMenuOpen ? <SideMenu onChangeVin={onChangeVin} /> : <div />}
-        <article style={split}>
-          <Helmet>
-            <title>Parts Detect ICO MVP</title>
-            <meta name="description" content="Parts Detect ICO MVP" />
-          </Helmet>
-          <div>
+      <div style={container}>
+        <div style={anchor}>
+          {slideMenuOpen && (
+            <SideMenu style={sideMenu} onChangeVin={onChangeVin} />
+          )}
+          <article style={split}>
+            <Helmet>
+              <title>Parts Detect ICO MVP</title>
+              <meta name="description" content="Parts Detect ICO MVP" />
+            </Helmet>
             <div>
-              <CenteredSection>
-                <H2>Early Features</H2>
-              </CenteredSection>
-              <Section>
-                <div style={queryContainer}>
-                  <H3 style={h3}>Enter Your VIN</H3>
-                  <div style={queryRow}>
-                    <input
-                      style={input}
-                      value={vin === '' ? '' : vin}
-                      placeholder="19UUA56602A801534"
-                      onChange={(evt) => onChangeVin(evt.target.value)}
-                    />
-                    <div style={subHeader}>
-                      <button onClick={() => setSlideMenu(!slideMenuOpen)}>
-                        No Vin handy? Click here
-                      </button>
-                    </div>
-                  </div>
-                  <button style={button} onClick={() => this.handleSubmit(vin)}>
-                    Click here
-                  </button>
-                </div>
-              </Section>
               <div>
-                <H2>Search Results</H2>
-                <div style={{ border: 'solid black 2px', height: '3rem' }}>
-                  {vin}
-                </div>
-                {this.props.vinData === '' ? null : (
-                  <List items={this.props.vinData} component={() => {}} />
-                )}
+                <CenteredSection>
+                  <div style={queryContainer}>
+                    <H3>Enter Your VIN</H3>
+                    <div style={queryRow}>
+                      <input
+                        style={input}
+                        value={vin || ''}
+                        placeholder="19UUA56602A801534"
+                        onChange={(evt) => onChangeVin(evt.target.value)}
+                      />
+                      <div style={subHeader}>
+                        <button onClick={() => setSlideMenu(!slideMenuOpen)}>
+                          {slideMenuOpen ? message1 : message2}
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      style={button}
+                      onClick={() => this.handleSubmit(vin)}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </CenteredSection>
+                <Section>
+                  <H2>Early Features</H2>
+                  <div>Blockchain based auto maintenance records</div>
+                  <li>Submit a vin number</li>
+                  <li>Select a maintenance operation</li>
+                </Section>
               </div>
             </div>
+          </article>
+        </div>
+
+        {this.props.vinData && (
+          <div>
+            <H2>Vehicle Specifications</H2>
+            <div style={{ border: 'solid black 2px', height: '3rem' }}>
+              {vin}
+            </div>
+            <List items={this.props.vinData} component={() => {}} />
           </div>
-        </article>
+        )}
       </div>
     );
   }

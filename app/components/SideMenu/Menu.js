@@ -16,7 +16,7 @@ const styles = {
     width: '15rem',
     height: '2.2rem',
     margin: '1rem',
-    border: 'solid black',
+    border: 'solid #fabd44',
   },
 };
 

@@ -11,21 +11,21 @@
  */
 
 import { fromJS } from 'immutable';
-
-import { SET_SLIDE_MENU, LOAD_DECODED, SET_SEARCH } from './constants';
+import appReducer from '../App/reducer';
+import { CHANGE_VIN, SET_SLIDE_MENU, LOAD_DECODED } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
-  search: '',
+  vin: '',
   slideMenuOpen: false,
   vinData: '',
 });
 
 function pdHomeReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_SEARCH:
+    case CHANGE_VIN:
       // Delete prefixed '@' from the github username
-      return state.set('search', action.search);
+      return state.set('vin', action.vin);
     case SET_SLIDE_MENU:
       return state.set('slideMenuOpen', action.bool);
     case LOAD_DECODED:

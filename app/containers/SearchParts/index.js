@@ -57,13 +57,11 @@ export class SearchParts extends React.Component {
       const data = await pd(vin);
       this.props.setVinData(data);
     } catch (e) {
-      console.log(e);
       alert(e);
     }
   }
 
   render() {
-    console.log('props', this.props);
     const { setSlideMenu, slideMenuOpen, onChangeVin, vin } = this.props;
     const {
       queryContainer,

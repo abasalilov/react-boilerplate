@@ -9,8 +9,9 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const SET_SEARCH = 'boilerplate/PartsDetectHome/SET_SEARCH';
+export const SEARCH = 'boilerplate/PartsDetectHome/SEARCH';
 export const SET_SLIDE_MENU = 'boilerplate/PartsDetectHome/SET_SLIDE_MENU';
 export const LOAD_DECODE_SUCCESS = 'boilerplate/App/LOAD_DECODE_SUCCESS';
 export const LOAD_DECODE_ERROR = 'boilerplate/App/LOAD_DECODE_ERROR';
 export const LOAD_DECODED = 'boilerplate/App/LOAD_DECODED';
+export const CHANGE_VIN = 'boilerplate/App/CHANGE_VIN';

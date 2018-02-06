@@ -87,6 +87,7 @@ const styles = {
   },
   button: {
     border: 'solid red',
+    borderRadius: '10px',
   },
 };
 

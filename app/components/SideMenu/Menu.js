@@ -3,20 +3,20 @@
  *
  * This is the first thing users see of our App, at the '/' route
  */
-
 import React from 'react';
-import H3 from 'components/H3';
 import vins from './sampleVins';
 import { slideInLeft } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
 
 const styles = {
   slideInLeft: {
-    border: 'red solid',
+    borderRadius: '100px',
     animation: 'x 1s',
     animationName: Radium.keyframes(slideInLeft, 'slideInLeft'),
     width: '15rem',
-    margin: '.2rem',
+    height: '2.2rem',
+    margin: '1rem',
+    border: 'solid black',
   },
 };
 
@@ -32,7 +32,7 @@ export default class SideMenu extends React.Component {
             onClick={() => onChangeVin(VIN)}
             key={VIN}
           >
-            <ul>{VIN}</ul>
+            {VIN}
           </button>
         ))}
       </StyleRoot>

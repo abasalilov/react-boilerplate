@@ -24,7 +24,6 @@ const initialState = fromJS({
 function pdHomeReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_VIN:
-      console.log('action', action);
       // Delete prefixed '@' from the github username
       return state.set('vin', action.vin);
     case SET_SLIDE_MENU:

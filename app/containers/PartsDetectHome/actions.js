@@ -1,4 +1,3 @@
-
 import pd from 'pdvindecoder/lib';
 
 import {
@@ -18,7 +17,6 @@ import {
  * @return {object}    An action object with a type of SET_SLIDE_MENU
  */
 export function changeVin(vin) {
-  console.log('here', vin);
   return {
     type: CHANGE_VIN,
     vin,
@@ -72,4 +70,3 @@ export function loadDecoded(data) {
     data,
   };
 }
-

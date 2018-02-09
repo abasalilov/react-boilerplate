@@ -97,6 +97,7 @@ export class PartsDetectHome extends React.Component {
   }
 
   componentDidMount() {
+    axios('http://159.89.159.211:5000/mine');
     this.getChain();
   }
 
@@ -108,6 +109,7 @@ export class PartsDetectHome extends React.Component {
         if (chainHX.transactions.length > 0) {
           chainHX.transactions.map((trx) => {
             if (trx.eventDetails !== undefined) {
+              console.log('trx', trx);
               if (trx.eventDetails.vin === this.props.vin) {
                 arr.push(trx);
               }
@@ -128,7 +130,7 @@ export class PartsDetectHome extends React.Component {
       return (
         <div style={noInfo}>{`No history for this vehicle ${
           this.props.vin
-        }`}</div>
+        } please go back to demo and submit a vin`}</div>
       );
     }
     return (
@@ -151,9 +153,10 @@ export class PartsDetectHome extends React.Component {
                     <div>
                       {`${trxHx.eventDetails.type} installation event`}
                       <br />
-                      {`Part Name: ${trxHx.eventDetails.partName}`}
+                      {`Name: ${trxHx.eventDetails.type}`}
                       <br />
-                      {`Part No: ${trxHx.eventDetails.partsNumber}`}
+                      {`No: ${trxHx.eventDetails.partsNumber ||
+                        trxHx.eventDetails.prodcedure}`}
                     </div>
                   ))}
                 </div>
@@ -180,18 +183,3 @@ const withReducer = injectReducer({ key: 'home', reducer });
 const withSaga = injectSaga({ key: 'home', saga });
 
 export default compose(withReducer, withSaga, withConnect)(PartsDetectHome);
-
-function getTransactions(carHx, vin) {
-  const { transactions } = carHx;
-  if (transactions.length > 0) {
-    return transactions.map(
-      (trx) =>
-        trx.eventDetails.vin !== undefined && trx.eventDetails.vin === vin ? (
-          <div>{('vin match', vin)}</div>
-        ) : (
-          <div>Here</div>
-        )
-    );
-  }
-  return <div>No History for this vehicle</div>;
-}

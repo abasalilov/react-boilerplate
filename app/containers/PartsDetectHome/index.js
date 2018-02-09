@@ -11,7 +11,6 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import List from 'components/List';
 import H2 from 'components/H2';
-import H3 from 'components/H3';
 import SideMenu from 'components/SideMenu';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -31,6 +30,7 @@ import {
 } from './actions';
 import reducer from './reducer';
 import saga from './saga';
+import axios from 'axios';
 require('./pdHome.css');
 
 const message1 = 'Close sample vins';
@@ -39,15 +39,16 @@ const message2 = 'No Vin handy? Click here';
 const styles = {
   queryContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
-    border: 'solid black',
+    width: '30rem',
   },
   queryRow: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'center',
+    marginTop: '1rem',
   },
   subHeader: {
     display: 'flex',
@@ -82,14 +83,17 @@ const styles = {
     width: '100%',
     animationName: Radium.keyframes(slideOutRight, 'slideOutRight'),
   },
-  button: {
+  btn1: {
     border: 'solid #fabd44',
     borderRadius: '10px',
+    margin: '.3rem',
   },
   sideMenu: {},
   container: {},
   specs: {
     textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
   },
   details: {
     display: 'flex',
@@ -104,8 +108,76 @@ const styles = {
     borderRadius: '10px',
     float: 'right',
     margin: '1rem',
+    width: '10rem',
+  },
+  actionContainer: {
+    margin: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  buttonRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    margin: '1rem',
+  },
+  mineSubmit: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '30rem',
+    justifyContent: 'space-around',
+  },
+  btnCircle: {
+    backgroundColor: 'white',
+    border: 'solid black',
+    borderRadius: '100%',
+    padding: '1rem .5rem',
+    fontSize: '1rem',
+    margin: '.3rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  select: {
+    border: 'solid #fabd44',
+  },
+  nextStep: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '60rem',
+  },
+  queryGrp: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '22rem',
+    alignItems: 'center',
+  },
+  stp4Container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '30rem',
+    marginBottom: '1rem',
+  },
+  eventContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    border: 'solid blue',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width: '30rem',
+    marginBottom: '1rem',
   },
 };
+
+const Step = (props) => (
+  <div style={styles.btnCircle} {...props}>
+    {`step ${props.num}`}
+  </div>
+);
 
 export class PartsDetectHome extends React.Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -117,8 +189,13 @@ export class PartsDetectHome extends React.Component {
     super(props);
     this.state = {
       inputText: '',
+      event: 'maintenance',
+      eventDetail: 'oil change',
     };
     this.updateInputText = this.updateInputText.bind(this);
+    this.handleChangeEvent = this.handleChangeEvent.bind(this);
+    this.handleChangeSelectDetail = this.handleChangeSelectDetail.bind(this);
+    this.handleBCRequest = this.handleBCRequest.bind(this);
   }
   componentDidMount() {}
 
@@ -135,11 +212,67 @@ export class PartsDetectHome extends React.Component {
     }
   }
 
+  handleChangeEvent(e) {
+    console.log('handle event detail change', e.target.value);
+    this.setState({ event: e.target.value });
+  }
+
+  handleChangeSelectDetail(e) {
+    this.setState({ eventDetail: e.target.value });
+  }
+
+  handleBCRequest() {
+    if (this.state.event === 'part') {
+      const dataToSend = {
+        sender: 'senderdude',
+        recipient: 'recipientdude',
+        amount: '1',
+        event: {
+          vin: this.props.vin,
+          type: this.state.event,
+          part: this.state.eventDetail,
+          partsNumber: 'PXD785H',
+        },
+      };
+      const url = 'http://159.89.159.211:5000/transactions/event';
+      axios
+        .post(url, dataToSend)
+        .then((feedback) => {
+          console.log(feedback);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      const dataToSend = {
+        sender: 'senderdude',
+        recipient: 'recipientdude',
+        amount: '1',
+        event: {
+          vin: this.props.vin,
+          type: this.state.event,
+          prodcedure: this.state.eventDetail,
+        },
+      };
+      console.log('maint', dataToSend);
+      const url = 'http://159.89.159.211:5000/transactions/event';
+      axios
+        .post(url, dataToSend)
+        .then((feedback) => {
+          console.log(feedback);
+        })
+        .catch((err) => console.log(err));
+    }
+
+    axios.get('http://138.68.242.58/5000/mine');
+    setTimeout(() => {
+      this.props.history.push('/pdbc');
+    }, 3000);
+  }
+
   render() {
     const { setSlideMenu, slideMenuOpen, onChangeVin, vin } = this.props;
     const {
       queryContainer,
-      button,
+      btn1,
       anchor,
       split,
       input,
@@ -147,9 +280,15 @@ export class PartsDetectHome extends React.Component {
       subHeader,
       sideMenu,
       container,
-      details,
+      stp4Container,
+      mineSubmit,
       specs,
       btmButton,
+      nextStep,
+      eventContainer,
+      actionContainer,
+      select,
+      queryGrp,
     } = styles;
     return (
       <div style={container}>
@@ -168,44 +307,103 @@ export class PartsDetectHome extends React.Component {
                 <div>Blockchain based auto maintenance records</div>
                 <li>Submit a vin number</li>
                 <li>Select a maintenance operation</li>
+                <li>заебись бля</li>
               </Section>
               <div>
                 <CenteredSection>
                   <div style={queryContainer}>
-                    <H3>Enter Your VIN</H3>
-                    <div style={queryRow}>
-                      <input
-                        style={input}
-                        value={vin || ''}
-                        placeholder="19UUA56602A801534"
-                        onChange={(evt) => onChangeVin(evt.target.value)}
-                      />
-                      <div style={subHeader}>
-                        <button onClick={() => setSlideMenu(!slideMenuOpen)}>
-                          {slideMenuOpen ? message1 : message2}
-                        </button>
+                    <Step num={1} />
+                    <div style={queryGrp}>
+                      <H2>Enter VIN</H2>
+                      <div style={queryRow}>
+                        <input
+                          style={input}
+                          value={vin || ''}
+                          placeholder="19UUA56602A801534"
+                          onChange={(evt) => onChangeVin(evt.target.value)}
+                        />
+                        <div style={subHeader}>
+                          <button onClick={() => setSlideMenu(!slideMenuOpen)}>
+                            {slideMenuOpen ? message1 : message2}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <button
-                      style={button}
-                      onClick={() => this.handleSubmit(vin)}
-                    >
-                      Submit
+                  </div>
+                </CenteredSection>
+                <CenteredSection>
+                  <div style={queryContainer}>
+                    <Step num={2} />
+                    <button style={btn1} onClick={() => this.handleSubmit(vin)}>
+                      Get Your Car Details
                     </button>
                   </div>
                 </CenteredSection>
+                {this.props.vinData && (
+                  <CenteredSection>
+                    <div style={queryContainer}>
+                      <Step num={3} />
+                      <div style={specs}>Review Specs for {vin} below</div>
+                    </div>
+                  </CenteredSection>
+                )}
               </div>
             </div>
           </article>
         </div>
         {this.props.vinData && (
-          <div>
-            <H2 style={specs}>Vehicle Specifications {vin}</H2>
-            <div style={details}>*scroll to bottom to submit order</div>
+          <div style={nextStep}>
             <List items={this.props.vinData} component={() => {}} />
-            <button style={btmButton} onClick={() => this.handleSubmit(vin)}>
-              {'Submit Event'}
-            </button>
+            <div style={actionContainer}>
+              <div style={stp4Container}>
+                <Step num={4} />
+                <div style={specs}>Select event to record and submit order</div>
+              </div>
+              <div style={eventContainer}>
+                <select
+                  style={select}
+                  value={this.state.event}
+                  onChange={this.handleChangeEvent}
+                >
+                  <option value="maintenance">Maintenance Event</option>
+                  <option value="part">Order Part</option>
+                </select>
+              </div>
+              {this.state.event === 'part' && (
+                <div style={eventContainer}>
+                  <select
+                    style={select}
+                    value={this.state.eventDetail}
+                    onChange={this.handleChangeSelectDetail}
+                  >
+                    <option value="brakes">brakes</option>
+                    <option value="head light blub">head light blub</option>
+                  </select>
+                </div>
+              )}
+              {this.state.event === 'maintenance' && (
+                <div style={eventContainer}>
+                  <select
+                    style={select}
+                    value={this.state.eventDetail}
+                    onChange={this.handleChangeSelectDetail}
+                  >
+                    <option value="oil change">oil change</option>
+                    <option value="brake change">brake change</option>
+                  </select>
+                </div>
+              )}
+              <div style={queryContainer}>
+                <Step num={5} />
+                <div style={specs}>Mine & review history</div>
+                <button
+                  style={btmButton}
+                  onClick={() => this.handleBCRequest(vin)}
+                >
+                  {'Mine & Review'}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

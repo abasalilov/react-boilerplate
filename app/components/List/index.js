@@ -12,7 +12,7 @@ const styles = {
   colOne: {
     height: '20%',
     margin: '1rem',
-    minWidth: '15rem',
+    minWidth: '8rem',
   },
   colTwo: {
     height: '20%',

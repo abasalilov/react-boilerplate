@@ -7,3 +7,13 @@ button:hover {
 button:focus {
   outline: 0;
 }
+
+select:hover {
+  cursor: pointer;
+  background-color: #fabd44;
+  color: white;
+  height: "15rem";
+}
+select:focus {
+  outline: 0;
+}

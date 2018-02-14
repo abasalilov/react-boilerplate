@@ -5,7 +5,7 @@ import A from './A';
 import Img from './Img';
 import NavBar from './NavBar';
 import HeaderLink from './HeaderLink';
-import Banner from './banner.png';
+import Logo from './logo.png';
 import messages from './messages';
 
 class Header extends React.Component {
@@ -13,12 +13,18 @@ class Header extends React.Component {
   render() {
     return (
       <div className="headerLink1">
-        <Img src={Banner} alt="ico poc" />
+        <Img src={Logo} alt="ico poc" />
         <NavBar>
-          <HeaderLink to="/">
+          <HeaderLink
+            className="white-button w3-button w3-btn w3-hover-red"
+            to="/"
+          >
             <FormattedMessage {...messages.home} />
           </HeaderLink>
-          <HeaderLink className="headerLink2" to="/pdbc">
+          <HeaderLink
+            className="white-button w3-button w3-btn w3-hover-red"
+            to="/pdbc"
+          >
             <FormattedMessage {...messages.features} />
           </HeaderLink>
         </NavBar>

@@ -4,23 +4,18 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import { slideOutRight } from 'react-animations';
-import Radium, { StyleRoot } from 'radium';
 import axios from 'axios';
 import React from 'react';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
-import H2 from 'components/H2';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectVin } from './selectors';
-
-import CenteredSection from './CenteredSection';
-
 import reducer from './reducer';
 import saga from './saga';
+require('./blockchainexplorer.css');
 
 const styles = {
   h3: {
@@ -49,7 +44,6 @@ const styles = {
   anchor: {
     display: 'flex',
     flexDirection: 'row',
-    border: 'solid red',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -60,6 +54,22 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  vin: {
+    float: 'right',
+  },
+};
+
+const Transaction = (props) => {
+  const { data } = props;
+  return (
+    <div className="item">
+      <span className="line">Transaction Type: {data.type}</span>
+      <br />
+      <span className="line">Submitted: {data.stamp}</span>
+      <br />
+      <span className="line">Part: {data.part}</span>
+    </div>
+  );
 };
 
 export class PartsDetectHome extends React.Component {
@@ -77,29 +87,34 @@ export class PartsDetectHome extends React.Component {
   }
 
   componentDidMount() {
-    axios('http://159.89.159.211:5000/mine');
+    // axios('http://159.89.159.211:5000/mine');
     this.getChain();
   }
 
   async getChain() {
     try {
-      const arr = [];
+      // const arr = [];
       const data = await axios('http://159.89.159.211:5000/chain');
-      data.data.chain.map((chainHX) => {
-        if (chainHX.transactions.length > 0) {
-          this.setState({ loading: true });
-          const stampedData = getStampedTransactions(chainHX, this.props.vin);
-          chainHX.transactions.map((trx) => {
-            if (trx.eventDetails !== undefined) {
-              if (trx.eventDetails.vin === this.props.vin) {
-                arr.push(trx);
-              }
-            }
-          });
-          this.setState({ loading: false });
-        }
-      });
-      this.setState({ data: arr });
+      const stampedData = getStampedTransactions(
+        data.data.chain,
+        this.props.vin
+      );
+      // console.log('stamped', stampedData);
+      // data.data.chain.map((chainHX) => {
+      //   if (chainHX.transactions.length > 0) {
+      //     this.setState({ loading: true });
+      //     chainHX.transactions.map((trx) => {
+      //       if (trx.eventDetails !== undefined) {
+      //         if (trx.eventDetails.vin === this.props.vin) {
+      //           arr.push(trx);
+      //         }
+      //       }
+      //     });
+      //     this.setState({ loading: false });
+      //   }
+      // });
+      this.setState({ data: stampedData });
+      // console.log('stamped', stampedData);
     } catch (e) {
       alert(e);
     }
@@ -110,7 +125,7 @@ export class PartsDetectHome extends React.Component {
   }
 
   render() {
-    const { anchor, split, loading, centered } = styles;
+    const { anchor, split, loading, centered, vin } = styles;
 
     if (this.state.data.length === 0) {
       return (
@@ -128,20 +143,11 @@ export class PartsDetectHome extends React.Component {
             <meta name="description" content="Parts Detect ICO MVP" />
           </Helmet>
           <div style={centered}>
-            <h3>VIN : {this.props.vin}</h3>
             <h3>Transaction History</h3>
-            <div style={{ border: 'solid green 2px' }}>
-              {this.state.data.map((trxHx) => (
-                <div>
-                  {`${trxHx.eventDetails.type} installation event`}
-                  <br />
-                  {`Name: ${trxHx.eventDetails.type}`}
-                  <br />
-                  {`No: ${trxHx.eventDetails.partsNumber ||
-                    trxHx.eventDetails.prodcedure}`}
-                </div>
-              ))}
-            </div>
+            <div style={vin}>VIN : {this.props.vin}</div>
+            {this.state.data.map((trx) => (
+              <Transaction key={Math.random()} data={trx} />
+            ))}
           </div>
         </article>
       </div>
@@ -165,6 +171,35 @@ const withSaga = injectSaga({ key: 'home', saga });
 export default compose(withReducer, withSaga, withConnect)(PartsDetectHome);
 
 function getStampedTransactions(data, vin) {
-  console.log('datra', data);
-  console.log('vin', vin);
+  const maint = [];
+  const install = [];
+  const one = data.map((trx) => {
+    const timeStamp = new Date(trx.timestamp);
+    if (trx.transactions.length > 1) {
+      trx.transactions.map((subTrx) => {
+        if (subTrx.eventDetails && subTrx.eventDetails.vin === vin) {
+          const event = subTrx.eventDetails;
+          event.stamp = timeStamp.toString();
+          install.push(event);
+        }
+      });
+    }
+  });
+  // console.log('install', install);
+  return install;
 }
+
+// <div style={{ border: 'solid green 2px' }}>
+// {this.state.data.map((trxHx) => (
+//   <div>
+//     {`${trxHx.eventDetails.type} installation event`}
+//     <br />
+//     {`${trxHx.eventDetails.part}`}
+//     <br />
+//     {`Name: ${trxHx.eventDetails.type}`}
+//     <br />
+//     {`No: ${trxHx.eventDetails.partsNumber ||
+//       trxHx.eventDetails.prodcedure}`}
+//   </div>
+// ))}
+// </div>

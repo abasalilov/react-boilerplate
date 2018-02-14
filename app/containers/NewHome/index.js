@@ -74,9 +74,7 @@ const styles = {
     animation: 'x 1s',
     width: '100%',
   },
-  button: {
-    border: 'solid red',
-  },
+  button: {},
 };
 
 export class PartsDetectHome extends React.Component {

@@ -173,11 +173,30 @@ const styles = {
     width: '30rem',
     marginBottom: '1rem',
   },
+  feedback: {
+    height: '10rem',
+    margin: '3rem',
+    borderRadius: '10px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: '3',
+    border: 'solid #fabd44',
+    textAlign: 'center',
+    backgroundColor: '#f2efba',
+  },
 };
 
 const Step = (props) => (
   <div style={styles.btnCircle} {...props}>
     {`step ${props.num}`}
+  </div>
+);
+
+const FeedBack = (props) => (
+  <div {...props}>
+    {props.info} <br /> You are about to be redirected
+    <i className="fa fa-cog fa-spin fa-2x fa-fw" />
   </div>
 );
 
@@ -193,6 +212,7 @@ export class PartsDetectHome extends React.Component {
       inputText: '',
       event: 'maintenance',
       eventDetail: 'oil change',
+      feedback: '',
     };
     this.updateInputText = this.updateInputText.bind(this);
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
@@ -215,7 +235,6 @@ export class PartsDetectHome extends React.Component {
   }
 
   handleChangeEvent(e) {
-    console.log('handle event detail change', e.target.value);
     this.setState({ event: e.target.value });
   }
 
@@ -226,8 +245,8 @@ export class PartsDetectHome extends React.Component {
   handleBCRequest() {
     if (this.state.event === 'part') {
       const dataToSend = {
-        sender: 'senderdude',
-        recipient: 'recipientdude',
+        sender: 'pdPOCsender',
+        recipient: 'pdPOCreceiver',
         amount: '1',
         event: {
           vin: this.props.vin,
@@ -241,12 +260,13 @@ export class PartsDetectHome extends React.Component {
         .post(url, dataToSend)
         .then((feedback) => {
           console.log(feedback);
+          this.setState({ feedback: feedback.data.message });
         })
         .catch((err) => console.log(err));
     } else {
       const dataToSend = {
-        sender: 'senderdude',
-        recipient: 'recipientdude',
+        sender: 'pdPOCsender',
+        recipient: 'pdPOCreceiver',
         amount: '1',
         event: {
           vin: this.props.vin,
@@ -259,6 +279,7 @@ export class PartsDetectHome extends React.Component {
         .post(url, dataToSend)
         .then((feedback) => {
           console.log(feedback);
+          this.setState({ feedback: feedback.data.message });
         })
         .catch((err) => console.log(err));
     }
@@ -278,6 +299,7 @@ export class PartsDetectHome extends React.Component {
       split,
       input,
       queryRow,
+      feedback,
       subHeader,
       sideMenu,
       container,
@@ -335,10 +357,11 @@ export class PartsDetectHome extends React.Component {
                   <div style={queryContainer}>
                     <Step num={2} />
                     <button style={btn1} onClick={() => this.handleSubmit(vin)}>
-                      Get Your Car Details
+                      Get Car Details
                     </button>
                   </div>
                 </CenteredSection>
+
                 {this.props.vinData && (
                   <CenteredSection>
                     <div style={queryContainer}>
@@ -417,6 +440,9 @@ export class PartsDetectHome extends React.Component {
                   {'Mine & Review'}
                 </button>
               </div>
+              {this.state.feedback ? (
+                <FeedBack style={feedback} info={this.state.feedback} />
+              ) : null}
             </div>
           </div>
         )}

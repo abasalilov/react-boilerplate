@@ -255,6 +255,7 @@ export class PartsDetectHome extends React.Component {
           partsNumber: 'PXD785H',
         },
       };
+      console.log('dataToSend', dataToSend);
       const url = 'http://159.89.159.211:5000/transactions/event';
       axios
         .post(url, dataToSend)
@@ -471,3 +472,5 @@ const withReducer = injectReducer({ key: 'home', reducer });
 const withSaga = injectSaga({ key: 'home', saga });
 
 export default compose(withReducer, withSaga, withConnect)(PartsDetectHome);
+// "{"sender":"pdPOCsender","recipient":"pdPOCreceiver","amount":"1","event":{"vin":"NM08E9E7AG856214","type":"maintenance","prodcedure":"oil change"}}"
+// "{"sender":"pdPOCsender","recipient":"pdPOCreceiver","amount":"1","event":{"vin":"NM08E9E7AG856214","type":"part","part":"Wind Sheild Wipers","partsNumber":"PXD785H"}}"

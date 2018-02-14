@@ -87,7 +87,7 @@ export class PartsDetectHome extends React.Component {
   }
 
   componentDidMount() {
-    // axios('http://159.89.159.211:5000/mine');
+    axios('http://159.89.159.211:5000/mine');
     this.getChain();
   }
 

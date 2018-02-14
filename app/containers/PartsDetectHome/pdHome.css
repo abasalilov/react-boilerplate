@@ -10,10 +10,27 @@ button:focus {
 
 select:hover {
   cursor: pointer;
-  background-color: #fabd44;
+  background-color: #fabd44 !important;
   color: white;
   height: "15rem";
 }
 select:focus {
   outline: 0;
+}
+
+button {
+  border-radius: 10px;
+}
+
+.product-line {
+  display: inline-block;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+.product-line span {
+  font-weight: 700;
 }

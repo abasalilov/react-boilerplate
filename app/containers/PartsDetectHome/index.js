@@ -50,14 +50,15 @@ const styles = {
     justifyContent: 'center',
   },
   subHeader: {
+    marginTop: '.25rem',
     display: 'flex',
     justifyContent: 'flex-end',
     height: '100%',
+    backgroundColor: 'transparent',
     fontSize: '10px',
     color: 'red',
   },
   input: {
-    border: 'solid black 2px',
     width: '13rem',
     backgroundColor: 'white',
   },
@@ -142,11 +143,13 @@ const styles = {
   },
   select: {
     border: 'solid #fabd44',
+    backgroundColor: 'white',
+    width: '100%',
   },
   nextStep: {
     display: 'flex',
     flexDirection: 'row',
-    width: '60rem',
+    width: '52rem',
   },
   queryGrp: {
     display: 'flex',
@@ -165,7 +168,6 @@ const styles = {
   eventContainer: {
     display: 'flex',
     flexDirection: 'row',
-    border: 'solid blue',
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '30rem',
@@ -252,7 +254,6 @@ export class PartsDetectHome extends React.Component {
           prodcedure: this.state.eventDetail,
         },
       };
-      console.log('maint', dataToSend);
       const url = 'http://159.89.159.211:5000/transactions/event';
       axios
         .post(url, dataToSend)
@@ -352,7 +353,11 @@ export class PartsDetectHome extends React.Component {
         </div>
         {this.props.vinData && (
           <div style={nextStep}>
-            <List items={this.props.vinData} component={() => {}} />
+            <List
+              items={this.props.vinData}
+              component={() => {}}
+              title={'Specifications'}
+            />
             <div style={actionContainer}>
               <div style={stp4Container}>
                 <Step num={4} />
@@ -375,8 +380,13 @@ export class PartsDetectHome extends React.Component {
                     value={this.state.eventDetail}
                     onChange={this.handleChangeSelectDetail}
                   >
-                    <option value="brakes">brakes</option>
-                    <option value="head light blub">head light blub</option>
+                    <option value="Front Brakes">Front Brakes</option>
+                    <option value="Rear Brakes">Rear Brakes</option>
+                    <option value="Head Light Kit">Head Light Kit</option>
+                    <option value="Wind Sheild Wipers">
+                      Wind Sheild Wipers
+                    </option>
+                    <option value="Batteries">Batteries</option>
                   </select>
                 </div>
               )}
@@ -387,8 +397,13 @@ export class PartsDetectHome extends React.Component {
                     value={this.state.eventDetail}
                     onChange={this.handleChangeSelectDetail}
                   >
-                    <option value="oil change">oil change</option>
-                    <option value="brake change">brake change</option>
+                    <option value="Oil Change">Oil Change</option>
+                    <option value="Brake Change">Brake Change</option>
+                    <option value="Tire Rotation">Tire Rotation</option>
+                    <option value="Radiator Flush">Radiator Flush</option>
+                    <option value="Steering Realignment">
+                      Steering Realignment
+                    </option>
                   </select>
                 </div>
               )}

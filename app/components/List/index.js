@@ -6,7 +6,7 @@ const styles = {
   rowContainer: {
     display: 'flex',
     flexDirection: 'row',
-    border: 'solid green',
+    border: 'solid #fabd44',
     borderRadius: '10px',
   },
   colOne: {
@@ -22,7 +22,7 @@ const styles = {
 };
 
 function List(props) {
-  const { rowContainer, colOne, colTwo } = styles;
+  const { rowContainer } = styles;
   const ComponentToRender = props.component;
   let content = <div />;
   // If we have items, render them
@@ -33,12 +33,20 @@ function List(props) {
     const data = Object.entries(props.items);
     content = data.map((item) => (
       <div key={item[0]} style={rowContainer}>
-        <li style={colOne} key={`item-${Math.random()}`} value={item[0]}>
+        <span
+          className="product-line"
+          key={`item-${Math.random()}`}
+          value={item[0]}
+        >
           {item[0]}
-        </li>
-        <li style={colTwo} key={`item-${Math.random()}`} value={item[1]}>
+        </span>
+        <span
+          className="product-line"
+          key={`item-${Math.random()}`}
+          value={item[1]}
+        >
           {item[1]}
-        </li>
+        </span>
       </div>
     ));
   } else {
@@ -48,6 +56,7 @@ function List(props) {
 
   return (
     <Wrapper>
+      <h4 style={{ textAlign: 'center' }}>{props.title}</h4>
       <Ul>{content}</Ul>
     </Wrapper>
   );

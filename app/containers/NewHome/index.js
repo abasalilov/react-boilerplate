@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectVin } from './selectors';
-import BackGround from '../../components/BackGround';
 import CenteredSection from './CenteredSection';
 
 import reducer from './reducer';
@@ -95,12 +94,7 @@ export class PartsDetectHome extends React.Component {
 
   render() {
     const { anchor } = styles;
-    return (
-      <div style={anchor}>
-        Here yo
-        <BackGround />
-      </div>
-    );
+    return <div style={anchor}>Here yo</div>;
   }
 }
 

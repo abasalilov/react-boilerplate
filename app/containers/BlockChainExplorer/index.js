@@ -23,24 +23,6 @@ import reducer from './reducer';
 import saga from './saga';
 
 const styles = {
-  queryContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    margin: '1rem',
-  },
-  queryRow: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    margin: '1rem',
-  },
-  subHeader: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    height: '100%',
-    fontSize: '10px',
-    color: 'red',
-  },
   h3: {
     float: 'right',
   },
@@ -50,36 +32,33 @@ const styles = {
   h4: {
     float: 'right',
   },
-  noInfo: {
-    border: 'solid #fa8f22',
+  loading: {
     marginTop: '5rem',
+    borderRadius: '100px',
+    backgroundColor: '#f2efba',
     width: '100%',
+    height: '400px',
+    lineHeight: '3.5rem',
     display: 'flex',
     fontSize: '1.6rem',
     fontWeight: 600,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: '3rem',
-  },
-  loading: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: 'solid blue',
   },
   anchor: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
-  },
-  slideOutRight: {
-    animation: 'x 1s',
-    width: '100%',
-    animationName: Radium.keyframes(slideOutRight, 'slideOutRight'),
-  },
-  button: {
     border: 'solid red',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centered: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 
@@ -93,6 +72,7 @@ export class PartsDetectHome extends React.Component {
     super(props);
     this.state = {
       data: [],
+      loading: false,
     };
   }
 
@@ -107,60 +87,60 @@ export class PartsDetectHome extends React.Component {
       const data = await axios('http://159.89.159.211:5000/chain');
       data.data.chain.map((chainHX) => {
         if (chainHX.transactions.length > 0) {
+          this.setState({ loading: true });
+          const stampedData = getStampedTransactions(chainHX, this.props.vin);
           chainHX.transactions.map((trx) => {
             if (trx.eventDetails !== undefined) {
-              console.log('trx', trx);
               if (trx.eventDetails.vin === this.props.vin) {
                 arr.push(trx);
               }
             }
           });
+          this.setState({ loading: false });
         }
       });
       this.setState({ data: arr });
     } catch (e) {
       alert(e);
     }
+
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 3000);
   }
 
   render() {
-    const { anchor, split, noInfo } = styles;
+    const { anchor, split, loading, centered } = styles;
 
     if (this.state.data.length === 0) {
       return (
-        <div style={noInfo}>{`No history for this vehicle ${
-          this.props.vin
-        } please go back to demo and submit a vin`}</div>
+        <div style={loading}>
+          {`Loading history for vehicle ${this.props.vin} please wait...`}
+          <i className="fa fa-cog fa-spin fa-2x fa-fw" />
+        </div>
       );
     }
     return (
       <div style={anchor}>
-        <div />
         <article style={split}>
           <Helmet>
             <title>Parts Detect ICO MVP</title>
             <meta name="description" content="Parts Detect ICO MVP" />
           </Helmet>
-          <div>
-            <div>
-              <CenteredSection>
-                <H2>VIN : {this.props.vin}</H2>
-              </CenteredSection>
-              <div>
-                <H2>History</H2>
-                <div style={{ border: 'solid green 2px' }}>
-                  {this.state.data.map((trxHx) => (
-                    <div>
-                      {`${trxHx.eventDetails.type} installation event`}
-                      <br />
-                      {`Name: ${trxHx.eventDetails.type}`}
-                      <br />
-                      {`No: ${trxHx.eventDetails.partsNumber ||
-                        trxHx.eventDetails.prodcedure}`}
-                    </div>
-                  ))}
+          <div style={centered}>
+            <h3>VIN : {this.props.vin}</h3>
+            <h3>Transaction History</h3>
+            <div style={{ border: 'solid green 2px' }}>
+              {this.state.data.map((trxHx) => (
+                <div>
+                  {`${trxHx.eventDetails.type} installation event`}
+                  <br />
+                  {`Name: ${trxHx.eventDetails.type}`}
+                  <br />
+                  {`No: ${trxHx.eventDetails.partsNumber ||
+                    trxHx.eventDetails.prodcedure}`}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </article>
@@ -183,3 +163,8 @@ const withReducer = injectReducer({ key: 'home', reducer });
 const withSaga = injectSaga({ key: 'home', saga });
 
 export default compose(withReducer, withSaga, withConnect)(PartsDetectHome);
+
+function getStampedTransactions(data, vin) {
+  console.log('datra', data);
+  console.log('vin', vin);
+}

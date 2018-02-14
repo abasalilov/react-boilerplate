@@ -12,6 +12,7 @@ export default styled(Link)`
   user-select: none;
   cursor: pointer;
   outline: 0;
+  background-color: white !important;
   font-family: 'Helvetica Neue', Helvetica, Veranda, sans-serif;
   font-weight: bold;
   font-size: 16px;

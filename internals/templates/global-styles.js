@@ -20,6 +20,7 @@ injectGlobal`
     background-color: #fafafa;
     min-height: 100%;
     min-width: 100%;
+    background-image: url('./silver_back.png');
   }
 
   p,

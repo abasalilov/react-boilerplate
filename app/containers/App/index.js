@@ -7,6 +7,7 @@
 
 import PartsDetectHome from 'containers/PartsDetectHome/Loadable';
 import BlockChainExplorer from 'containers/BlockChainExplorer/Loadable';
+import NewHome from 'containers/NewHome/Loadable';
 // import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import React from 'react';
@@ -19,6 +20,7 @@ const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
   margin: 0 auto;
   width:"100%",
+  background-color: green,
   display: flex;
   min-height: 100%;
   padding: 0 16px;
@@ -36,6 +38,7 @@ const App = () => (
         <Switch>
           <Route exact path="/" component={PartsDetectHome} />
           <Route path="/pdbc" component={BlockChainExplorer} />
+          <Route path="/newHome" component={NewHome} />
         </Switch>
       </AppWrapper>
     </div>

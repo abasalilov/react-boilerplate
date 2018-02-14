@@ -4,6 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 import { slideOutRight } from 'react-animations';
+import axios from 'axios';
 import Radium, { StyleRoot } from 'radium';
 import pd from 'pdvindecoder/lib';
 import React from 'react';
@@ -30,7 +31,6 @@ import {
 } from './actions';
 import reducer from './reducer';
 import saga from './saga';
-import axios from 'axios';
 require('./pdHome.css');
 
 const message1 = 'Close sample vins';
@@ -48,7 +48,6 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '1rem',
   },
   subHeader: {
     display: 'flex',
@@ -60,6 +59,7 @@ const styles = {
   input: {
     border: 'solid black 2px',
     width: '13rem',
+    backgroundColor: 'white',
   },
   clear: {
     display: 'none',
@@ -281,7 +281,6 @@ export class PartsDetectHome extends React.Component {
       sideMenu,
       container,
       stp4Container,
-      mineSubmit,
       specs,
       btmButton,
       nextStep,
